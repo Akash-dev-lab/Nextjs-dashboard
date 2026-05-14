@@ -16,3 +16,20 @@ input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+
+@keyframes drawLine {
+  0% {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+  }
+
+  100% {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-draw {
+  animation: drawLine 3s linear infinite alternate;
+}

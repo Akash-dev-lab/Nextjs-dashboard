@@ -1,31 +1,70 @@
-import {
-  BanknotesIcon,
-  ClockIcon,
-  UserGroupIcon,
-  InboxIcon,
-} from '@heroicons/react/24/outline';
-import { lusitana } from '@/app/ui/fonts';
+import { lusitana } from "@/app/ui/fonts";
+import { fetchCardData } from "@/app/lib/data";
+import Sparkline from "./sparkline";
+import { FaArrowTrendUp } from "react-icons/fa6";
+
+type CardType = "invoices" | "customers" | "pending" | "collected";
 
 const iconMap = {
-  collected: BanknotesIcon,
-  customers: UserGroupIcon,
-  pending: ClockIcon,
-  invoices: InboxIcon,
+  collected:
+    "https://pub-c5e31b5cdafb419fb247a8ac2e78df7a.r2.dev/public/assets/icons/glass/ic-glass-bag.svg",
+  customers: "/customers/lee-robinson.png",
+  pending: "/customers/balazs-orban.png",
+  invoices: "/customers/michael-novotny.png",
+} satisfies Record<CardType, string>;
+
+const cardStyles = {
+  collected: {
+    outer: "bg-green-200",
+    inner: "bg-green-100",
+    text: "text-teal-900",
+    graph: "#0f766e",
+    trend: "+2.6%",
+  },
+
+  customers: {
+    outer: "bg-violet-200",
+    inner: "bg-violet-100",
+    text: "text-violet-900",
+    graph: "#7F1D95",
+    trend: "-0.1%",
+  },
+
+  invoices: {
+    outer: "bg-yellow-200",
+    inner: "bg-yellow-100",
+    text: "text-amber-700",
+    graph: "#B45309",
+    trend: "+2.8%",
+  },
+
+  pending: {
+    outer: "bg-rose-200",
+    inner: "bg-rose-100",
+    text: "text-rose-900",
+    graph: "#881337",
+    trend: "+3.6%",
+  },
 };
 
 export default async function CardWrapper() {
+  const {
+    numberOfCustomers,
+    numberOfInvoices,
+    totalPaidInvoices,
+    totalPendingInvoices,
+  } = await fetchCardData();
+
   return (
     <>
-      {/* NOTE: Uncomment this code in Chapter 9 */}
-
-      {/* <Card title="Collected" value={totalPaidInvoices} type="collected" />
+      <Card title="Collected" value={totalPaidInvoices} type="collected" />
       <Card title="Pending" value={totalPendingInvoices} type="pending" />
       <Card title="Total Invoices" value={numberOfInvoices} type="invoices" />
       <Card
         title="Total Customers"
         value={numberOfCustomers}
         type="customers"
-      /> */}
+      />
     </>
   );
 }
@@ -37,22 +76,47 @@ export function Card({
 }: {
   title: string;
   value: number | string;
-  type: 'invoices' | 'customers' | 'pending' | 'collected';
+  type: CardType;
 }) {
-  const Icon = iconMap[type];
+  const iconUrl = iconMap[type];
+  const styles = cardStyles[type];
 
   return (
-    <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
-      <div className="flex p-4">
-        {Icon ? <Icon className="h-5 w-5 text-gray-700" /> : null}
-        <h3 className="ml-2 text-sm font-medium">{title}</h3>
+    <div className={`rounded-3xl p-6 shadow-sm ${styles.outer}`}>
+      <div className={`flex pb-5 justify-between`}>
+        <span
+          aria-label={`${title} icon`}
+          className="h-12 w-12 shrink-0 rounded-full bg-cover bg-center"
+          role="img"
+          style={{ backgroundImage: `url(${iconUrl})` }}
+        />
+
+        <div className="flex">
+          <div className="flex gap-1 items-center h-5">
+            <FaArrowTrendUp className={`${styles.text}`} />
+          <p className={`${styles.text}`}>{styles.trend}</p>
+          </div>
+        </div>
       </div>
-      <p
-        className={`${lusitana.className}
-          truncate rounded-xl bg-white px-4 py-8 text-center text-2xl`}
-      >
-        {value}
-      </p>
+
+      <div className="flex justify-between">
+        <div className="flex flex-col gap-2">
+          <p
+            className={`text-left font-semibold ${styles.text} text-sm`}
+          >
+            {title}
+          </p>
+          <p
+            className={`truncate rounded-3xl text-left font-semibold text-2xl ${styles.text}`}
+          >
+            {value}
+          </p>
+        </div>
+
+        <div className="">
+          <Sparkline color={styles.graph} />
+        </div>
+      </div>
     </div>
   );
 }
