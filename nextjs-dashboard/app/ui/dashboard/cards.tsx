@@ -82,11 +82,11 @@ export function Card({
   const styles = cardStyles[type];
 
   return (
-    <div className={`rounded-3xl p-6 shadow-sm ${styles.outer}`}>
+    <div className={`rounded-3xl p-4 sm:p-6 shadow-sm ${styles.outer}`}>
       <div className={`flex pb-5 justify-between`}>
         <span
           aria-label={`${title} icon`}
-          className="h-12 w-12 shrink-0 rounded-full bg-cover bg-center"
+          className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-full bg-cover bg-center"
           role="img"
           style={{ backgroundImage: `url(${iconUrl})` }}
         />
@@ -94,7 +94,7 @@ export function Card({
         <div className="flex">
           <div className="flex gap-1 items-center h-5">
             <FaArrowTrendUp className={`${styles.text}`} />
-          <p className={`${styles.text}`}>{styles.trend}</p>
+          <p className={`${styles.text} text-xs sm:text-sm`}>{styles.trend}</p>
           </div>
         </div>
       </div>
@@ -102,19 +102,19 @@ export function Card({
       <div className="flex justify-between">
         <div className="flex flex-col gap-2">
           <p
-            className={`text-left font-semibold ${styles.text} text-sm`}
+            className={`text-left font-semibold ${styles.text} text-xs sm:text-sm`}
           >
             {title}
           </p>
           <p
-            className={`truncate rounded-3xl text-left font-semibold text-2xl ${styles.text}`}
+            className={`truncate rounded-3xl text-left font-semibold text-xl sm:text-2xl ${styles.text}`}
           >
             {value}
           </p>
         </div>
 
         <div className="">
-          <Sparkline color={styles.graph} />
+          {/* <Sparkline color={styles.graph} /> */}
         </div>
       </div>
     </div>
