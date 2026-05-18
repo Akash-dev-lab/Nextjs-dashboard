@@ -9,7 +9,7 @@ import {
 } from "@/app/ui/skeletons";
 import CardWrapper from "@/app/ui/dashboard/cards";
 import { Metadata } from "next";
-import { Bars3Icon, BellIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import { BellIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 
 export const metadata: Metadata = {
   title: "Dashboard",

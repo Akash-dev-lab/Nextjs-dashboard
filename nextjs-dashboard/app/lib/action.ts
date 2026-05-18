@@ -3,7 +3,7 @@ import { z } from "zod";
 import postgres from "postgres";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { signIn } from '@/auth';
+import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
 
 export type State = {
@@ -128,3 +128,9 @@ export async function authenticate(
     }
     throw error;
   }}
+
+export async function logout() {
+  await signOut({
+    redirectTo: '/',
+  });
+}

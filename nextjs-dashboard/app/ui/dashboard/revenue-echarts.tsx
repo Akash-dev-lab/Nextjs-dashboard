@@ -1,98 +1,86 @@
-"use client";
+'use client';
 
-import ReactECharts from "echarts-for-react";
-import * as echarts from "echarts";
+import * as React from 'react';
 
-export default function RevenueECharts({
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import { ChartsContainer } from '@mui/x-charts/ChartsContainer';
+import { BarPlot } from '@mui/x-charts/BarChart';
+import { LinePlot } from '@mui/x-charts/LineChart';
+import { ChartsXAxis } from '@mui/x-charts/ChartsXAxis';
+
+export default function RevenueChart({
   months,
   revenueData,
 }: {
   months: string[];
   revenueData: number[];
 }) {
-  const option: echarts.EChartsOption = {
-    backgroundColor: '#fff',
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'shadow',
-      },
-    },
-    legend: {
-      data: ['line', 'bar'],
-      textStyle: {
-        color: '#ccc',
-      },
-    },
-    xAxis: {
-      data: months,
-      axisLine: {
-        lineStyle: {
-          color: '#ccc',
-        },
-      },
-    },
-    yAxis: {
-      splitLine: { show: false },
-      axisLine: {
-        lineStyle: {
-          color: '#fff',
-        },
-      },
-    },
-    series: [
-      {
-        name: 'line',
-        type: 'line',
-        smooth: true,
-        showAllSymbol: true,
-        symbol: 'emptyCircle',
-        symbolSize: 15,
-        data: revenueData,
-      },
-      {
-        name: 'bar',
-        type: 'bar',
-        barWidth: 10,
-        itemStyle: {
-          borderRadius: 5,
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: '#14c8d4' },
-            { offset: 1, color: '#43e' },
-          ]),
-        },
-        data: revenueData,
-      },
-      {
-        name: 'line',
-        type: 'bar',
-        barGap: '-100%',
-        barWidth: 10,
-        itemStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: 'rgba(20,200,212,0.5)' },
-            { offset: 0.2, color: 'rgba(20,200,212,0.2)' },
-            { offset: 1, color: 'rgba(20,200,212,0)' },
-          ]),
-        },
-        z: -12,
-        data: revenueData,
-      },
-      {
-        name: 'dotted',
-        type: 'pictorialBar',
-        symbol: 'rect',
-        itemStyle: {
-          color: '#0f375f',
-        },
-        symbolRepeat: true,
-        symbolSize: [12, 4],
-        symbolMargin: 1,
-        z: -10,
-        data: revenueData,
-      },
-    ],
-  };
 
-  return <ReactECharts option={option} style={{ height: 350 }} />;
+  const [type, setType] = React.useState<'line' | 'bar'>(
+    'line'
+  );
+
+  return (
+    <Box sx={{ width: '100%' }}>
+
+      {/* SWITCH DROPDOWN */}
+      <TextField
+        select
+        value={type}
+        onChange={(event) =>
+          setType(event.target.value as 'line' | 'bar')
+        }
+        label="Series Type"
+        sx={{
+          minWidth: 180,
+          mb: 3,
+        }}
+      >
+        <MenuItem value="line">
+          Line
+        </MenuItem>
+
+        <MenuItem value="bar">
+          Bar
+        </MenuItem>
+      </TextField>
+
+      {/* CHART */}
+      <ChartsContainer
+        series={[
+          {
+            type,
+            data: revenueData,
+            label: 'Revenue',
+          },
+        ]}
+        xAxis={[
+          {
+            data: months,
+            scaleType: 'band',
+            id: 'revenue-axis',
+            height: 48,
+          },
+        ]}
+        height={350}
+      >
+
+        {/* BAR */}
+        <BarPlot />
+
+        {/* LINE */}
+        <LinePlot />
+
+        {/* X AXIS */}
+        <ChartsXAxis
+          label="Months"
+          axisId="revenue-axis"
+        />
+
+      </ChartsContainer>
+
+    </Box>
+  );
 }
