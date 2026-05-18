@@ -8,9 +8,9 @@ type CardType = "invoices" | "customers" | "pending" | "collected";
 const iconMap = {
   collected:
     "https://pub-c5e31b5cdafb419fb247a8ac2e78df7a.r2.dev/public/assets/icons/glass/ic-glass-bag.svg",
-  customers: "/customers/lee-robinson.png",
-  pending: "/customers/balazs-orban.png",
-  invoices: "/customers/michael-novotny.png",
+  customers: "/customer.png",
+  pending: "/pending.png",
+  invoices: "/invoice.png",
 } satisfies Record<CardType, string>;
 
 const cardStyles = {
